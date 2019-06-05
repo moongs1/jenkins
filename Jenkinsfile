@@ -1,29 +1,54 @@
 pipeline { 
-    agent any 
+    agent any
+    parameters {
+        string(name: 'jenkins_branch', defaultValue: 'jenkins', description: 'Jenkins Branch')
+        string(name: 'git_repo', defaultValue: 'git@github.com:moongs1/jenkins.git', description: 'Git repository')
+    } 
+
     stages {
-        stage('Clone repository') { 
+       stage('Clone repository') { 
             steps { 
-                git url: 'git@github.com:moongs1/sa.it.git'
+                git url: "${params.git_repo}", branch: "${params.jenkins_branch}"
             }
         }
-        stage('Checking repository'){
+
+
+       stage('Checking  repository'){
             steps { 
                 sh "ls -l"
             }
         }
-        stage('Packing project') {
+
+       stage('Date') {
             steps {
                 sh '''
-                tar -zcvf /tmp/package.tar.gz  ./
+                
+                echo "date" >date.txt
                 '''
-                deleteDir()
-                sh "mv /tmp/package.tar.gz  ./"
             }
-        }
-        stage('Packing test') {
+       }
+
+
+       stage('Git push Date'){
             steps {
-                sh "ls -l"
-            }
+                sh "git add --all"
+                sh "git commit -m 'System date'"         
+                sh "git push origin ${params.jenkins_branch}" 
+               }
+            
         }
+       stage('delite Date'){
+            steps {
+                sh "git rm date.txt "
+                sh "git commit -m 'delite date'"         
+                sh "git push origin ${params.jenkins_branch}" 
+               }
+            
+        }
+        
+        
     }
+    
+
+    
 }
