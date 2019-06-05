@@ -2,7 +2,7 @@ pipeline {
     agent any
     parameters {
         string(name: 'jenkins_branch', defaultValue: 'jenkins', description: 'Jenkins Branch')
-        string(name: 'git_repo', defaultValue: 'git@github.com:moongs1/jenkins.git', description: 'Git repository')
+        string(name: 'git_repo', defaultValue: 'git@github.com:moongs1/sa.it.git', description: 'Git repository')
     } 
 
     stages {
@@ -37,10 +37,10 @@ pipeline {
                }
             
         }
-       stage('delite Date'){
+       stage('delete Date'){
             steps {
                 sh "git rm date.txt "
-                sh "git commit -m 'delite date'"         
+                sh "git commit -m 'delete date'"         
                 sh "git push origin ${params.jenkins_branch}" 
                }
             
